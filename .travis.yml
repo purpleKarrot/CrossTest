@@ -26,6 +26,7 @@ matrix:
         - DEPENDS="binutils-mingw-w64-i686 gcc-mingw-w64-i686 g++-mingw-w64-i686 wine"
 
 before_install:
+  - sudo apt-get update -qq
   - sudo apt-get install -qq --no-install-recommends $DEPENDS libboost-dev
 
 script:
