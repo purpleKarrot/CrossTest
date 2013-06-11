@@ -1,0 +1,34 @@
+#=============================================================================
+# Copyright (C) 2013 Daniel Pfeifer <daniel@pfeifer-mail.de>
+#
+# Distributed under the Boost Software License, Version 1.0.
+# See accompanying file LICENSE_1_0.txt or copy at
+#   http://www.boost.org/LICENSE_1_0.txt
+#=============================================================================
+
+language: cpp
+
+compiler:
+  - clang
+  - gcc
+
+env:
+  matrix:
+    - BUILD_TYPE=Debug
+    - BUILD_TYPE=Release
+
+matrix:
+  include:
+    - compiler: gcc
+      env:
+        - BUILD_TYPE=Release
+        - OPTIONS="-DCMAKE_TOOLCHAIN_FILE=../i686-w64-mingw32.cmake"
+        - DEPENDS="binutils-mingw-w64-i686 gcc-mingw-w64-i686 g++-mingw-w64-i686 wine"
+
+before_install:
+  - sudo apt-get install -qq --no-install-recommends $DEPENDS libboost-dev
+
+script:
+  - mkdir _build
+  - cd _build
+  - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE $OPTIONS .. && make -k all test
